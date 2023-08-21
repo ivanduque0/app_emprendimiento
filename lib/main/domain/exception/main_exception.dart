@@ -1,0 +1,3 @@
+class MainErrorConnectionException implements Exception{
+
+}
