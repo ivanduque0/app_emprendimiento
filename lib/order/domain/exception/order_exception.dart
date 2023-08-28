@@ -1,0 +1,3 @@
+class OrderErrorConnectionException implements Exception{
+
+}

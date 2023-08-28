@@ -1,13 +1,17 @@
 import 'dart:io';
 
+import 'package:app_emprendimiento/db/db_helper.dart';
 import 'package:app_emprendimiento/main/presentation/getx/main_binding.dart';
 import 'package:app_emprendimiento/main/presentation/routes/main_navigation.dart';
+import 'package:app_emprendimiento/order/presentation/routes/stock_navigation.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
 import 'package:app_emprendimiento/services/theme_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:flutter_localizations/flutter_localizations.dart'; 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'stock/presentation/routes/stock_navigation.dart'; 
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -21,6 +25,7 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
+  await DBHelper.initDb();
   await GetStorage.init();
   runApp(const MyApp());
 }
@@ -49,7 +54,8 @@ class MyApp extends StatelessWidget {
       initialRoute: MainRoutes.main,
       getPages: [
         MainPages.MainPageRoute,
-        MainPages.AddOrderPageRoute
+        OrderPages.AddOrderPageRoute,
+        StockPages.AddToStockPageRoute
       ],
       initialBinding: MainBinding(),
     );

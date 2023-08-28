@@ -4,8 +4,9 @@ import 'package:flutter/widgets.dart';
 
 class MyButton extends StatelessWidget {
   final String label;
+  final Color? color;
   final Function() onTap;
-  const MyButton({super.key, required this.label, required this.onTap});
+  const MyButton({super.key, required this.label, required this.onTap, this.color});
   //const MyButton({Key? key, required this.label, required this.onTap}):super(key: key);
   
   @override
@@ -17,7 +18,7 @@ class MyButton extends StatelessWidget {
         height:60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: primaryClr
+          color: color??primaryClr
         ),
         child: Center(
           child: Text(label,

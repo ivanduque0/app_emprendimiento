@@ -1,4 +1,5 @@
 import 'package:app_emprendimiento/main/presentation/getx/main_controller.dart';
+import 'package:app_emprendimiento/order/presentation/getx/order_controller.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
 import 'package:app_emprendimiento/ui/widgets/button.dart';
 import 'package:app_emprendimiento/ui/widgets/input_field.dart';
@@ -6,21 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class AddOrderPage extends GetWidget<MainController> {
+class AddOrderInfoScreen extends GetWidget<OrderController> {
 
   List<int> remindTimeList = [5,10,15,20];
+  MainController mainController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      body: Container(
+    return Container(
         padding: const EdgeInsets.only(left:20, right:20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Agregar pedido",
+              Text("Informacion del pedido",
                 style: headingStyle,
               ),
               MyInputField(title: "Nombre", hint:"ingrese nombre"),
@@ -28,7 +28,7 @@ class AddOrderPage extends GetWidget<MainController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(()=> controller.refreshState.value==refreshScreen.initial?Expanded(
+                  Obx(()=> mainController.refreshState.value==refreshScreen.initial?Expanded(
                     child: MyInputField(
                       title: "Fecha a pagar", 
                       hint:controller.orderDateSelected.value?DateFormat.yMd('es_ES').format(controller.orderDateTime.value).toString():"dd/mm/aaaa", 
@@ -44,7 +44,7 @@ class AddOrderPage extends GetWidget<MainController> {
                   ):SizedBox.shrink()
                   ),
                   SizedBox(width:10),
-                  Obx(()=> controller.refreshState.value==refreshScreen.initial?Expanded(
+                  Obx(()=> mainController.refreshState.value==refreshScreen.initial?Expanded(
                     child: MyInputField(
                       title: "Hora a pagar", 
                       hint:DateFormat("hh:mm a").format(controller.orderDateTime.value).toString(), 
@@ -81,7 +81,7 @@ class AddOrderPage extends GetWidget<MainController> {
                       }).toList(),
                       onChanged:(value) {
                         controller.selectedRemindTime(int.parse(value!));
-                        controller.refreshScreenFunction();
+                        mainController.refreshScreenFunction();
                       },
                     ),
                   )
@@ -101,8 +101,7 @@ class AddOrderPage extends GetWidget<MainController> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   _colorPallette(){
@@ -120,7 +119,7 @@ class AddOrderPage extends GetWidget<MainController> {
               return GestureDetector(
                 onTap: (){
                   controller.selectedColor(index);
-                  controller.refreshScreenFunction();
+                  mainController.refreshScreenFunction();
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right:8.0),
@@ -169,7 +168,7 @@ class AddOrderPage extends GetWidget<MainController> {
       controller.orderDateSelected(true);
       DateTime updatedOrderDateTime = DateTime(_pickerDate.year, _pickerDate.month, _pickerDate.day, controller.orderDateTime.value.hour, controller.orderDateTime.value.minute);
       controller.orderDateTime(updatedOrderDateTime);
-      controller.refreshScreenFunction();
+      mainController.refreshScreenFunction();
     }
   }
 
@@ -182,7 +181,7 @@ class AddOrderPage extends GetWidget<MainController> {
     if (_pickerTime!=null) {
       DateTime updatedOrderDateTime = DateTime(controller.orderDateTime.value.year, controller.orderDateTime.value.month, controller.orderDateTime.value.day, _pickerTime.hour, _pickerTime.minute);
       controller.orderDateTime(updatedOrderDateTime);
-      controller.refreshScreenFunction();
+      mainController.refreshScreenFunction();
     }
 
   }

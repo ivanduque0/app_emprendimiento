@@ -1,5 +1,6 @@
 import 'package:app_emprendimiento/ui/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -8,11 +9,13 @@ class MyInputField extends StatelessWidget {
   final String hint;
   final TextEditingController? textController;
   final Widget? widget;
+  final bool? onlyNumbers;
   const MyInputField({super.key, 
     required this.title, 
     required this.hint,
     this.textController,
-    this.widget
+    this.widget,
+    this.onlyNumbers
   });
 
   @override
@@ -46,6 +49,10 @@ class MyInputField extends StatelessWidget {
                     cursorColor: Get.isDarkMode?Colors.grey[100]:Colors.grey[700],
                     controller: textController,
                     style: subTitleStyle,
+                    keyboardType: onlyNumbers==true?TextInputType.number:null,
+                    inputFormatters: onlyNumbers==true?<TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                    ]:[], 
                     decoration: InputDecoration(
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,

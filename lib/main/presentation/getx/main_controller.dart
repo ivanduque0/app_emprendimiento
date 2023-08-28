@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:app_emprendimiento/db/db_helper.dart';
 import 'package:app_emprendimiento/main/domain/repositories/api_main_repository.dart';
 import 'package:app_emprendimiento/main/domain/repositories/local_main_repository.dart';
 import 'package:app_emprendimiento/services/notification_services.dart';
+import 'package:app_emprendimiento/stock/domain/models/item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +30,7 @@ class MainController extends GetxController {
     NotifyHelper().initializeNotification();
     NotifyHelper().requestAndroidPermissions();
     NotifyHelper().requestIOSPermissions();
+    getItemsInStock();
     refreshScreenFunction();
   }
 
@@ -34,13 +39,10 @@ class MainController extends GetxController {
   RxBool isDarkMode = false.obs;
   var refreshState = refreshScreen.initial.obs;
   Rx<DateTime> selectedDate = DateTime.now().obs;
-  Rx<DateTime> orderDateTime = DateTime.now().obs;
-  RxBool orderDateSelected = false.obs;
-  RxInt selectedRemindTime = 5.obs;
-  RxInt selectedColor = 0.obs;
   RxInt mainScreenIndex = 0.obs;
   RxDouble tasaDolar = 0.0.obs;
   RxDouble calculoDolar = 0.0.obs;
+  RxList itemsList = [].obs;
 
   refreshScreenFunction() {
     refreshState(refreshScreen.refresh);
@@ -55,4 +57,11 @@ class MainController extends GetxController {
     refreshScreenFunction();
     return tasasDeDolar;
   }
+
+  getItemsInStock()async{
+  List items = await DBHelper.queryItems();
+  // itemsList.assignAll(items.map((data) => print(data['price'].runtimeType)));
+  // itemsList.assignAll(items.map((data) => print(data)));
+  itemsList.assignAll(items.map((data) => new Item.fromJson(data)).toList());
+}
 }

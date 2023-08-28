@@ -1,0 +1,3 @@
+class StockErrorConnectionException implements Exception{
+
+}

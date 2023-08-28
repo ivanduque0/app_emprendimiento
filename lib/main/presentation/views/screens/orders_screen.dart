@@ -1,5 +1,6 @@
 import 'package:app_emprendimiento/main/presentation/getx/main_controller.dart';
 import 'package:app_emprendimiento/main/presentation/routes/main_navigation.dart';
+import 'package:app_emprendimiento/order/presentation/routes/stock_navigation.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
 import 'package:app_emprendimiento/ui/widgets/button.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
@@ -78,10 +79,7 @@ class OrdersScreen extends GetWidget<MainController> {
             ),
           ),
           MyButton(label: "Agregar Pedido", onTap: (){
-            controller.orderDateSelected(false);
-            controller.selectedRemindTime(5);
-            controller.orderDateTime(DateTime.now());
-            Get.toNamed(MainRoutes.addOrder);
+            Get.toNamed(OrderRoutes.addOrder);
             })
         ],
       ),
