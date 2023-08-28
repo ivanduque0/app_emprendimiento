@@ -129,7 +129,7 @@ class EditItemPage extends GetWidget<StockController> {
                             titleTextStyle: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 30,
-                              color: Colors.black
+                              color: mainController.isDarkMode.value?white:Colors.black,
                             ),
                             // descTextStyle: TextStyle(
                             //   fontWeight: FontWeight.bold,
@@ -141,7 +141,7 @@ class EditItemPage extends GetWidget<StockController> {
                             headerAnimationLoop: false,
                             dialogType: DialogType.warning,
                             showCloseIcon: true,
-                            title: "Seguro que desea eliminar el articulo?",
+                            title: "¿Seguro que desea eliminar el articulo?",
                             btnCancelOnPress: () {},
                             btnOkOnPress: () async {
                               controller.deleteItem(id);
