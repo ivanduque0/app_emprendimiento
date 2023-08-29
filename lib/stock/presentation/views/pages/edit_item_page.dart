@@ -63,15 +63,25 @@ class EditItemPage extends GetWidget<StockController> {
                 Text("Editar articulo",
                   style: headingStyle,
                 ),
-                MyInputField(title: "Nombre", hint:"ingrese nombre", textController: nameTextController,),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    children: [
-                      Expanded(child: MyInputCurrencyField(title: "precio", hint: "0.00\$", textController: priceTextController,)),
-                      SizedBox(width: 20,),
-                      Expanded(child: MyInputField(title: "Cantidad disponible", hint: "0", onlyNumbers: true, textController: quantityTextController,))
-                    ],
+                  padding: const EdgeInsets.only(bottom: 20, top: 15),
+                  child: Center(
+                    child: Hero(
+                      tag:"photoItem_$id",
+                      child: Container(
+                        height: MediaQuery.of(context).size.width - 10,
+                        width: MediaQuery.of(context).size.width - 10,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.contain,
+                            image: FileImage(controller.imageFile.value['file']??File(photo.toString()))
+                          ),
+                          color: white,
+                          borderRadius: BorderRadius.circular(12)
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
@@ -92,25 +102,15 @@ class EditItemPage extends GetWidget<StockController> {
                     ],
                   ),
                 ),
+                MyInputField(title: "Nombre", hint:"ingrese nombre", textController: nameTextController,),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
-                  child: Center(
-                    child: Hero(
-                      tag:"photoItem_$id",
-                      child: Container(
-                        height: MediaQuery.of(context).size.width - 10,
-                        width: MediaQuery.of(context).size.width - 10,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.contain,
-                            image: FileImage(controller.imageFile.value['file']??File(photo))
-                          ),
-                          color: white,
-                          borderRadius: BorderRadius.circular(12)
-                        ),
-                      ),
-                    ),
+                  child: Row(
+                    children: [
+                      Expanded(child: MyInputCurrencyField(title: "precio", hint: "0.00\$", textController: priceTextController,)),
+                      SizedBox(width: 20,),
+                      Expanded(child: MyInputField(title: "Cantidad disponible", hint: "0", onlyNumbers: true, textController: quantityTextController,))
+                    ],
                   ),
                 ),
                 //MyInputField(title: "articulo", hint:"ingrese el articulo"),

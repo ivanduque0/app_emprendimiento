@@ -12,12 +12,13 @@ class OrderPage extends GetWidget<OrderController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
+      backgroundColor: Colors.black,
+      appBar: _appBar(controller),
       body: Container(
-        padding: const EdgeInsets.only(left:20, right:20),
+        //padding: const EdgeInsets.only(left:20, right:20),
         child: Obx(() => 
-          controller.orderStep.value==addOrderStep.selectItems?SelectItemsScreen():
-          controller.orderStep.value==addOrderStep.setOrderInfo?AddOrderInfoScreen():
+          controller.orderStep.value==OrderStep.selectItems?SelectItemsScreen():
+          controller.orderStep.value==OrderStep.setOrderInfo?AddOrderInfoScreen():
           SaveOrderScreen()
         )
         
@@ -61,19 +62,27 @@ class OrderPage extends GetWidget<OrderController> {
     );
   }
 
-  _appBar(){
+  _appBar(OrderController controller){
     return AppBar(
-      
-      leading: GestureDetector(
-        onTap: (){
-          Get.back();
-        },
-        child: Icon(
-          Icons.arrow_back_ios,
-          size: 25,
+        title: Obx(() => Text(
+            controller.orderStep.value==OrderStep.selectItems?"Añadir productos al carrito":
+            "Informacion de la orden",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700
+            ),
+            ),
         ),
-      ),
-    );
+        leading: GestureDetector(
+          onTap: (){
+            Get.back();
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            size: 25,
+          ),
+        ),
+      );
   }
 
   _getDateFromUser(BuildContext context) async {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:app_emprendimiento/db/db_helper.dart';
 import 'package:app_emprendimiento/main/presentation/getx/main_controller.dart';
@@ -8,6 +9,7 @@ import 'package:app_emprendimiento/stock/presentation/getx/stock_binding.dart';
 import 'package:app_emprendimiento/stock/presentation/routes/stock_navigation.dart';
 import 'package:app_emprendimiento/stock/presentation/views/pages/edit_item_page.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
+import 'package:app_emprendimiento/order/presentation/views/pages/item_detail.dart';
 import 'package:app_emprendimiento/ui/widgets/item_in_list.dart';
 import 'package:app_emprendimiento/ui/widgets/staggered_dual_view.dart';
 import 'package:flutter/material.dart';
@@ -65,22 +67,44 @@ _addItemButton(controller){
 }
 
 _showItems(MainController controller){
+  
   return Expanded(
-    child: Obx(() => 
-      controller.refreshState.value==refreshScreen.initial?Padding(
-        padding: const EdgeInsets.symmetric(horizontal:7.0),
-        child: StaggeredDualView(
-          itemCount: controller.itemsList.length,
-          spacing: 2,
-          aspectRatio: 0.7,
-          itemBuilder: (_, index){
-            return ItemWidget(
-              item: controller.itemsList.value[index]
-            );
-          }
-      
-        ),
-      ):SizedBox.shrink()
-    )
+    child: Obx(()=> controller.refreshState.value==refreshScreen.initial?Padding(
+      padding: const EdgeInsets.symmetric(horizontal:7.0),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10
+        ), 
+        itemCount: controller.itemsList.value.length,
+        itemBuilder: (_, index){
+          return GestureDetector(
+            onTap: () {
+              Get.to(()=>EditItemPage(
+                id:controller.itemsList.value[index].id,
+                photo:controller.itemsList.value[index].photo,
+                priceTextController: TextEditingController(text:controller.itemsList.value[index].price),
+                nameTextController: TextEditingController(text:controller.itemsList.value[index].name),
+                quantityTextController: TextEditingController(text:controller.itemsList.value[index].quantity.toString()),
+                ), binding: StockBinding(), 
+                transition: Transition.fadeIn,
+                duration: Duration(milliseconds: 700));
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Hero(
+                tag: "photoItem_${controller.itemsList.value[index].id}",
+                child: Image.file(
+                  File(controller.itemsList.value[index].photo??""),
+                  fit: BoxFit.cover,
+                  ),
+              ),
+            ),
+          );
+        }
+      ),
+    ):SizedBox.shrink(),
+    ),
   );
 }

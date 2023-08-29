@@ -6,10 +6,16 @@ import 'package:app_emprendimiento/stock/domain/models/item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-enum addOrderStep {
+enum OrderStep {
   selectItems,
   setOrderInfo,
   finish
+}
+
+enum SelectItemsState {
+  normal,
+  detail,
+  cart
 }
 
 class OrderController extends GetxController {
@@ -25,8 +31,10 @@ class OrderController extends GetxController {
   RxInt selectedRemindTime = 5.obs;
   RxInt selectedColor = 0.obs;
   Rx<DateTime> orderDateTime = DateTime.now().obs;
-  var orderStep = addOrderStep.selectItems.obs;
+  var orderStep = OrderStep.selectItems.obs;
+  var selectItemsState = SelectItemsState.normal.obs;
   RxList itemsList = [].obs;
+  RxInt itemQuantity = 1.obs;
 
   @override
   void onInit() {
@@ -35,8 +43,24 @@ class OrderController extends GetxController {
     super.onInit();
   }
 
-  changeOrderStep(addOrderStep step){
+  increaseItemQuantity(){
+    itemQuantity(itemQuantity.value+1);
+  }
+
+  decreaseItemQuantity(){
+    itemQuantity(itemQuantity.value-1);
+  }
+
+  resetItemQuantity(){
+    itemQuantity(1);
+  }
+
+  changeOrderStep(OrderStep step){
     orderStep(step);
+  }
+
+  changeSelectItemsState(SelectItemsState state){
+    selectItemsState(state);
   }
 
   getItemsInStock()async{

@@ -11,6 +11,7 @@ const Color white = Colors.white;
 const Color black = Colors.black;
 const Color primaryClr = blueClr;
 const Color darkGreyClr = Color(0xff121212);
+const Color lightGreyClr = Color.fromARGB(255, 210, 210, 210);
 Color darkHeaderClr = Color(0xff424242);
 
 MainController mainController = Get.find();
@@ -66,12 +67,42 @@ TextStyle get titleStyle{
   );
 }
 
+TextStyle get titleStyleStock{
+  return GoogleFonts.lato (
+    textStyle: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      color:Colors.black
+    )
+  );
+}
+
 TextStyle get subTitleStyle{
   return GoogleFonts.lato (
     textStyle: TextStyle(
       fontSize: 17,
       fontWeight: FontWeight.w400,
       color:mainController.isDarkMode.value?Colors.grey[100]:Colors.grey[600]
+    )
+  );
+}
+
+TextStyle get subTitleStyleItem{
+  return GoogleFonts.lato (
+    textStyle: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color:black
+    )
+  );
+}
+
+TextStyle get priceStyleItem{
+  return GoogleFonts.lato (
+    textStyle: TextStyle(
+      fontSize: 25,
+      fontWeight: FontWeight.bold,
+      color:black
     )
   );
 }

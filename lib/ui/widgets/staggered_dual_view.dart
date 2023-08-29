@@ -29,7 +29,7 @@ class StaggeredDualView extends StatelessWidget {
             minHeight: height,
             maxWidth: width,
             child: GridView.builder(
-              padding: EdgeInsets.only(top: itemHeight/2, bottom: itemHeight+10),
+              padding: EdgeInsets.only(top: itemHeight/2, bottom: itemHeight),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: aspectRatio,
