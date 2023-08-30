@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:app_emprendimiento/order/presentation/getx/order_controller.dart';
 import 'package:app_emprendimiento/stock/domain/models/item.dart';
-import 'package:app_emprendimiento/stock/presentation/getx/stock_binding.dart';
-import 'package:app_emprendimiento/stock/presentation/views/pages/edit_item_page.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
-import 'package:app_emprendimiento/order/presentation/views/pages/item_detail.dart';
+import 'package:app_emprendimiento/order/presentation/views/pages/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +23,12 @@ class ItemWidget extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         if (item.quantity==0) return;
+        orderController.heroTag("");
         orderController.resetItemQuantity();
+        try {
+          orderController.lookForProductInCart(item.id!);
+        } catch (e) {
+        }
         Get.to(()=>ItemDetail(
           item:item
           ),
@@ -62,20 +65,26 @@ class ItemWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "\$${item.price??""}",
-                  style: priceStyleItem,
+                  "\$${double.parse(item.price??"0").toStringAsFixed(2)}",
+                  style: priceStyleItem.copyWith(
+                    color: Get.isDarkMode?white:black
+                  ),
                   textAlign: TextAlign.right,
                 ),
                 SizedBox(height: 15,),
                 Text(
                   item.name??"",
                   maxLines: 2,
-                  style: subTitleStyleItem
+                  style: subTitleStyleItem.copyWith(
+                    color: Get.isDarkMode?white:black
+                  )
                 ),
                 SizedBox(height: 7,),
                 Text(
                   "${item.quantity??""} unidades",
-                  style: subTitleStyleItem,
+                  style: subTitleStyleItem.copyWith(
+                    color: Get.isDarkMode?white:black
+                  ),
                 ),
                 // Column(
                 //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

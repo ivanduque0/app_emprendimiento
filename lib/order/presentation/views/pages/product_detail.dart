@@ -1,9 +1,7 @@
 import 'dart:io';
-
+import 'package:app_emprendimiento/order/domain/models/product_cart.dart';
 import 'package:app_emprendimiento/order/presentation/getx/order_controller.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
-import 'package:app_emprendimiento/ui/widgets/button.dart';
-import 'package:app_emprendimiento/ui/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +12,11 @@ class ItemDetail extends GetWidget<OrderController> {
   });
   final item;
   final qttyController = TextEditingController();
+
+  _addToCart(ProductCart product){
+    controller.addProductToCart(product);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +38,13 @@ class ItemDetail extends GetWidget<OrderController> {
                     child: ClipRRect(
                       clipBehavior: Clip.antiAlias,
                       borderRadius: BorderRadius.circular(20),
-                      child: Hero(
-                        tag: "itemId${item.id}",
-                        child: Image.file(
-                        File(item.photo),
-                        fit: BoxFit.scaleDown,
-                        height: MediaQuery.of(context).size.height*0.4,
+                      child: Obx(()=>Hero(
+                          tag: "itemId${item.id}${controller.heroTag.value}",
+                          child: Image.file(
+                          File(item.photo),
+                          fit: BoxFit.scaleDown,
+                          height: MediaQuery.of(context).size.height*0.4,
+                          ),
                         ),
                       ),
                     ),
@@ -52,7 +56,8 @@ class ItemDetail extends GetWidget<OrderController> {
                       Text(
                         "${item.name}",
                         style: priceStyleItem.copyWith(
-                          fontSize: 24
+                          fontSize: 24,
+                          color: Get.isDarkMode?white:black
                         ),
                       ),
                     ],
@@ -91,7 +96,7 @@ class ItemDetail extends GetWidget<OrderController> {
                                 padding: const EdgeInsets.symmetric(horizontal:12.0),
                                 child: Obx(()=>Text(
                                     "${controller.itemQuantity.value}",
-                                    style: TextStyle(fontSize: 28),),
+                                    style: TextStyle(fontSize: 28, color: black),),
                                 ),
                               )
                               ),
@@ -120,7 +125,8 @@ class ItemDetail extends GetWidget<OrderController> {
                       Text(
                         "\$${item.price}",
                         style: priceStyleItem.copyWith(
-                          fontSize: 30
+                          fontSize: 30,
+                          color: Get.isDarkMode?white:black
                         ),
                       ),
                     ],
@@ -132,7 +138,12 @@ class ItemDetail extends GetWidget<OrderController> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: (){}, 
+                    onPressed: ()async{
+                        await _addToCart(ProductCart(product: item, quantity: controller.itemQuantity.value));
+                        controller.heroTag("detail");
+                        controller.refresCart();
+                      Get.back();
+                    }, 
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 15),
                       child: Text(

@@ -1,20 +1,11 @@
 import 'dart:io';
-import 'dart:math';
-
-import 'package:app_emprendimiento/db/db_helper.dart';
 import 'package:app_emprendimiento/main/presentation/getx/main_controller.dart';
-import 'package:app_emprendimiento/main/presentation/routes/main_navigation.dart';
-import 'package:app_emprendimiento/stock/domain/models/item.dart';
 import 'package:app_emprendimiento/stock/presentation/getx/stock_binding.dart';
 import 'package:app_emprendimiento/stock/presentation/routes/stock_navigation.dart';
 import 'package:app_emprendimiento/stock/presentation/views/pages/edit_item_page.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
-import 'package:app_emprendimiento/order/presentation/views/pages/item_detail.dart';
-import 'package:app_emprendimiento/ui/widgets/item_in_list.dart';
-import 'package:app_emprendimiento/ui/widgets/staggered_dual_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
 class StockScreen extends GetWidget<MainController> {
   const StockScreen({super.key});

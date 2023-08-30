@@ -12,96 +12,103 @@ class AddOrderInfoScreen extends GetWidget<OrderController> {
   List<int> remindTimeList = [5,10,15,20];
   MainController mainController = Get.find();
 
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.only(left:20, right:20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Informacion del pedido",
-                style: headingStyle,
-              ),
-              MyInputField(title: "Nombre", hint:"ingrese nombre"),
-              //MyInputField(title: "articulo", hint:"ingrese el articulo"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Obx(()=> mainController.refreshState.value==refreshScreen.initial?Expanded(
-                    child: MyInputField(
-                      title: "Fecha a pagar", 
-                      hint:controller.orderDateSelected.value?DateFormat.yMd('es_ES').format(controller.orderDateTime.value).toString():"dd/mm/aaaa", 
-                      widget: IconButton(
-                        onPressed: (){
-                          _getDateFromUser(context);
-                        },
-                        icon: Icon(
-                          Icons.calendar_today_outlined,
-                          color: Colors.grey,
-                        )
-                      )),
-                  ):SizedBox.shrink()
-                  ),
-                  SizedBox(width:10),
-                  Obx(()=> mainController.refreshState.value==refreshScreen.initial?Expanded(
-                    child: MyInputField(
-                      title: "Hora a pagar", 
-                      hint:DateFormat("hh:mm a").format(controller.orderDateTime.value).toString(), 
-                      widget: IconButton(
-                        onPressed: (){
-                          _getTimeFromUser(context);
-                        },
-                        icon: Icon(
-                          Icons.access_time_filled_rounded,
-                          color: Colors.grey,
-                        )
-                      )),
-                  ):SizedBox.shrink()
-                  ),
-                ],
-              ),
-              Obx(()=>MyInputField(
-                  title: "Recordatorio", 
-                  hint:"${controller.selectedRemindTime.value} minutos antes",
-                  widget: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      padding: EdgeInsets.only(right:7),
-                      icon: Icon(Icons.keyboard_arrow_down_outlined,
-                        color: Colors.grey,
-                      ),
-                      iconSize: 32,
-                      elevation: 4,
-                      style: subTitleStyle,
-                      items: remindTimeList.map<DropdownMenuItem<String>>((int value) {
-                        return DropdownMenuItem<String>(
-                          child: Text(value.toString()),
-                          value: value.toString()
-                        );
-                      }).toList(),
-                      onChanged:(value) {
-                        controller.selectedRemindTime(int.parse(value!));
-                        mainController.refreshScreenFunction();
-                      },
-                    ),
-                  )
+    return WillPopScope(
+      onWillPop: () async {
+        controller.changeOrderStep(OrderStep.selectItems);
+        return false;
+      },
+      child: Container(
+          padding: const EdgeInsets.only(left:20, right:20),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Informacion del pedido",
+                  style: headingStyle,
                 ),
-              ),
-              SizedBox(height: 18,),
-              _colorPallette(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  MyButton(
-                        label: "Continuar", 
-                        onTap: (){}),
-                ],
-              )
-              
-            ],
+                MyInputField(title: "Nombre", hint:"ingrese nombre"),
+                //MyInputField(title: "articulo", hint:"ingrese el articulo"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Obx(()=> mainController.refreshState.value==refreshScreen.initial?Expanded(
+                      child: MyInputField(
+                        title: "Fecha a pagar", 
+                        hint:controller.orderDateSelected.value?DateFormat.yMd('es_ES').format(controller.orderDateTime.value).toString():"dd/mm/aaaa", 
+                        widget: IconButton(
+                          onPressed: (){
+                            _getDateFromUser(context);
+                          },
+                          icon: Icon(
+                            Icons.calendar_today_outlined,
+                            color: Colors.grey,
+                          )
+                        )),
+                    ):SizedBox.shrink()
+                    ),
+                    SizedBox(width:10),
+                    Obx(()=> mainController.refreshState.value==refreshScreen.initial?Expanded(
+                      child: MyInputField(
+                        title: "Hora a pagar", 
+                        hint:DateFormat("hh:mm a").format(controller.orderDateTime.value).toString(), 
+                        widget: IconButton(
+                          onPressed: (){
+                            _getTimeFromUser(context);
+                          },
+                          icon: Icon(
+                            Icons.access_time_filled_rounded,
+                            color: Colors.grey,
+                          )
+                        )),
+                    ):SizedBox.shrink()
+                    ),
+                  ],
+                ),
+                Obx(()=>MyInputField(
+                    title: "Recordatorio", 
+                    hint:"${controller.selectedRemindTime.value} minutos antes",
+                    widget: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        padding: EdgeInsets.only(right:7),
+                        icon: Icon(Icons.keyboard_arrow_down_outlined,
+                          color: Colors.grey,
+                        ),
+                        iconSize: 32,
+                        elevation: 4,
+                        style: subTitleStyle,
+                        items: remindTimeList.map<DropdownMenuItem<String>>((int value) {
+                          return DropdownMenuItem<String>(
+                            child: Text(value.toString()),
+                            value: value.toString()
+                          );
+                        }).toList(),
+                        onChanged:(value) {
+                          controller.selectedRemindTime(int.parse(value!));
+                          mainController.refreshScreenFunction();
+                        },
+                      ),
+                    )
+                  ),
+                ),
+                SizedBox(height: 18,),
+                _colorPallette(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MyButton(
+                          label: "Siguiente", 
+                          onTap: (){}),
+                  ],
+                )
+                
+              ],
+            ),
           ),
         ),
-      );
+    );
   }
 
   _colorPallette(){

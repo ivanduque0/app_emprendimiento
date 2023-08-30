@@ -1,8 +1,7 @@
-import 'package:app_emprendimiento/main/presentation/getx/main_controller.dart';
 import 'package:app_emprendimiento/order/presentation/getx/order_controller.dart';
 import 'package:app_emprendimiento/order/presentation/views/screens/add_order_info_screen.dart';
 import 'package:app_emprendimiento/order/presentation/views/screens/save_order_screen.dart';
-import 'package:app_emprendimiento/order/presentation/views/screens/select_items_screen.dart';
+import 'package:app_emprendimiento/order/presentation/views/screens/select_products_screen.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,17 +10,17 @@ class OrderPage extends GetWidget<OrderController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: _appBar(controller),
-      body: Container(
-        //padding: const EdgeInsets.only(left:20, right:20),
-        child: Obx(() => 
-          controller.orderStep.value==OrderStep.selectItems?SelectItemsScreen():
-          controller.orderStep.value==OrderStep.setOrderInfo?AddOrderInfoScreen():
-          SaveOrderScreen()
-        )
-        
+    return Obx(()=>Scaffold(
+        backgroundColor: controller.orderStep.value==OrderStep.selectItems?black:null,
+        appBar: _appBar(controller),
+        body: Container(
+          //padding: const EdgeInsets.only(left:20, right:20),
+          child: controller.orderStep.value==OrderStep.selectItems?SelectProductsScreen():
+            controller.orderStep.value==OrderStep.setOrderInfo?AddOrderInfoScreen():
+            SaveOrderScreen()
+
+          
+        ),
       ),
     );
   }
