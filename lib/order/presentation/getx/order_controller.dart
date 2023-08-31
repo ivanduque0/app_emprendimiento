@@ -1,8 +1,10 @@
 import 'package:app_emprendimiento/db/db_helper.dart';
+import 'package:app_emprendimiento/order/domain/models/order.dart';
 import 'package:app_emprendimiento/order/domain/models/product_cart.dart';
 import 'package:app_emprendimiento/order/domain/repositories/api_order_repository.dart';
 import 'package:app_emprendimiento/order/domain/repositories/local_order_repository.dart';
 import 'package:app_emprendimiento/stock/domain/models/item.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 enum OrderStep {
@@ -45,6 +47,9 @@ class OrderController extends GetxController {
   RxString heroTag = "".obs;
   RxInt productsInCartQuantity=0.obs;
   RxDouble totalToPay = 0.00.obs;
+  late Rx<Order> orderObject;
+
+  final nameTextController = TextEditingController(text:"");
 
   @override
   void onInit() {
@@ -131,5 +136,32 @@ class OrderController extends GetxController {
         refresCart();
       }
     }
+  }
+
+  setOrderObject(Order order){
+    orderObject = order.obs;
+  }
+
+  Future<int> addOrder() async {
+    return await DBHelper.insertOrder(orderObject.value) ;
+  }
+
+  Future updateProductsInStock()async {
+    for (ProductCart cartProduct in cartProducts) {
+      Item product = cartProduct.product;
+      int quantityInStock = await product.quantity??0;
+      int quantityToDecreaseInStock = cartProduct.quantity;
+      int deltaQuantity = quantityInStock - quantityToDecreaseInStock;
+      product.quantity=deltaQuantity;
+      await updateItem(product);
+    }
+  }
+
+  Future<int> updateItem(Item item) async {
+    return await DBHelper.updateItem(item) ;
+  }
+
+  Future<int> deleteOrder(int id) async {
+    return await DBHelper.deleteItem(id) ;
   }
 }

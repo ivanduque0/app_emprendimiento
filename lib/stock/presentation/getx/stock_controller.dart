@@ -34,7 +34,7 @@ class StockController extends GetxController {
   addPhoto(File file, path){
     Map mapFile = {"file": file, "path":path};
     imageFile(mapFile);
-    print(imageFile.value);
+    // print(imageFile.value);
   }
 
   Future<int> addItem(Item item) async {

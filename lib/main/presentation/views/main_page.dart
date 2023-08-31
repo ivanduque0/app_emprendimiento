@@ -49,15 +49,15 @@ class MainPage extends GetWidget<MainController> {
     if (index==2) {
       controller.calculatorTextController.clear();
       controller.calculoDolar(0);
-      try {
-        await controller.updateTasa();
-      } catch (e) {
-        NotifyHelper().displayNotification(
-          title:"¡ATENCION!",
-          body:"Error al actualizar la tasa, intentelo de nuevo"
-        );
-        return ;
-      }
+      // try {
+      //   await controller.updateTasa();
+      // } catch (e) {
+      //   NotifyHelper().displayNotification(
+      //     title:"¡ATENCION!",
+      //     body:"Error al actualizar la tasa, intentelo de nuevo"
+      //   );
+      //   return ;
+      // }
     }
   }
 
@@ -78,14 +78,15 @@ class MainPage extends GetWidget<MainController> {
         FloatingActionButton(
           onPressed: () async {
             try {
+              controller.changeUpdateTasaState(UpdateTasaState.update);
               await controller.updateTasa();
             } catch (e) {
               NotifyHelper().displayNotification(
                 title:"¡ATENCION!",
                 body:"Error al actualizar la tasa, intentelo de nuevo"
               );
-              return ;
             }
+            controller.changeUpdateTasaState(UpdateTasaState.initial);
             if (controller.calculatorTextController.text.isEmpty) {
               return;
             }
@@ -102,10 +103,17 @@ class MainPage extends GetWidget<MainController> {
               bottomRight: Radius.circular(30.0),
             ),
           ),
-          child: Icon(Icons.refresh_outlined,
+          child: controller.updateTasaState.value==UpdateTasaState.update?
+          Transform(
+            transform: Matrix4.identity()..scale(0.8),
+            alignment: FractionalOffset.center,
+            child: CircularProgressIndicator(
+              strokeWidth: 5,
+            ),
+          ):Icon(Icons.refresh_outlined,
             size: 30,
             color: black,
-          ),
+          ), 
         ):
         null,
         bottomNavigationBar: BottomNavigationBar(

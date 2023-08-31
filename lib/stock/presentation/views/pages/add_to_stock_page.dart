@@ -113,9 +113,20 @@ class AddToStockPage extends GetWidget<StockController> {
                             if (controller.quantityTextController.text=="") {
                               controller.quantityTextController.text="0";
                             }
+
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) {
+                                return WillPopScope(
+                                  onWillPop: () async => false,
+                                  child:  Center(child: CircularProgressIndicator(strokeWidth: 5,)));
+                              }
+                            );
                             
                             _addItemToDB();
                             await mainController.getItemsInStock();
+                            Get.back();
                             return Get.back();
                           }
                           Get.snackbar(
@@ -129,9 +140,6 @@ class AddToStockPage extends GetWidget<StockController> {
                             ),
                             margin: EdgeInsets.only(bottom: 15, left: 15, right: 15)
                           );
-                          print(controller.nameTextController.text);
-                          print(controller.priceTextController.text);
-                          print(controller.quantityTextController.text);
                           //_saveNetworkImage(controller.imageFile.value['file']);
                         }),
                     ],

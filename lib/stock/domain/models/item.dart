@@ -16,7 +16,7 @@ class Item {
   Item.fromJson(Map json) {
     id = json['id'];
     name = json['name'];
-    price = double.parse(json['price'].toString()).toString();
+    price = double.parse(json['price'].toString()).toStringAsFixed(2);
     photo = json['photo'];
     quantity = json['quantity'];
   }

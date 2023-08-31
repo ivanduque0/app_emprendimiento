@@ -1,30 +1,35 @@
-import 'package:app_emprendimiento/main/presentation/getx/main_controller.dart';
 import 'package:app_emprendimiento/order/presentation/getx/order_controller.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class SaveOrderScreen extends GetWidget<OrderController> {
-  SaveOrderScreen({super.key});
+class OrderDetail extends GetWidget<OrderController> {
+  OrderDetail({super.key,
+  required this.cartProducts,
+  required this.order,
+  required this.orderDateTime
+  });
+
+  final cartProducts;
+  final order;
+  final orderDateTime;
 
   List colors = [primaryClr,pinkClr,yellowClr];
   double iconsSize = 30;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        controller.changeOrderStep(OrderStep.setOrderInfo);
-        return false;
-      },
-      child: Center(
+    return Scaffold(
+      backgroundColor: controller.orderStep.value==OrderStep.selectItems?black:null,
+        appBar: _appBar(controller),
+      body: Center(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: colors[controller.orderObject.value.color??0],
+              color: colors[order.color??0],
             ),
             child: Column(
               children: [
@@ -39,11 +44,11 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                           padding: const EdgeInsets.only(bottom:5.0),
                           child: Row(
                             children: [
-                              Icon(Icons.person,size: iconsSize,color: controller.orderObject.value.color==2?black:white,),
+                              Icon(Icons.person,size: iconsSize,color: order.color==2?black:white,),
                               Text(
                                 "Nombre",
                                 style: subHeadingStyle.copyWith(
-                                  color: controller.orderObject.value.color==2?black:white,
+                                  color: order.color==2?black:white,
                                   fontSize: 25
                                 ),  
                               ),
@@ -53,9 +58,9 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal:10.0),
                           child: Text(
-                            "${controller.orderObject.value.name}",
+                            "${order.name}",
                             style: subHeadingStyle.copyWith(
-                              color: controller.orderObject.value.color==2?black:white
+                              color: order.color==2?black:white
                             ),  
                           ),
                         ),
@@ -64,11 +69,11 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                           padding: const EdgeInsets.only(bottom:5.0),
                           child: Row(
                             children: [
-                              Icon(Icons.calendar_month,size: iconsSize,color: controller.orderObject.value.color==2?black:white,),
+                              Icon(Icons.calendar_month,size: iconsSize,color: order.color==2?black:white,),
                               Text(
                                 "Fecha de pago",
                                 style: subHeadingStyle.copyWith(
-                                  color: controller.orderObject.value.color==2?black:white,
+                                  color: order.color==2?black:white,
                                   fontSize: 25
                                 ),  
                               ),
@@ -78,9 +83,9 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal:10.0),
                           child: Text(
-                            "${DateFormat.yMd('es_ES').format(controller.orderDateTime.value).toString()} - ${DateFormat("hh:mm a").format(controller.orderDateTime.value).toString()}",
+                            "${DateFormat.yMd('es_ES').format(orderDateTime).toString()} - ${DateFormat("hh:mm a").format(orderDateTime).toString()}",
                             style: subHeadingStyle.copyWith(
-                              color: controller.orderObject.value.color==2?black:white
+                              color: order.color==2?black:white
                             ),  
                             ),
                         ),
@@ -89,11 +94,11 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                           padding: const EdgeInsets.only(bottom:5.0),
                           child: Row(
                             children: [
-                              Icon(Icons.shopping_cart_checkout_outlined,size: iconsSize,color: controller.orderObject.value.color==2?black:white,),
+                              Icon(Icons.shopping_cart_checkout_outlined,size: iconsSize,color: order.color==2?black:white,),
                               Text(
                                 "Articulos",
                                 style: subHeadingStyle.copyWith(
-                                  color: controller.orderObject.value.color==2?black:white,
+                                  color: order.color==2?black:white,
                                   fontSize: 25
                                 ),  
                               ),
@@ -105,7 +110,7 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal:15.0),
                             child: ListView.builder(
-                                itemCount: controller.cartProducts.length,
+                                itemCount: cartProducts.length,
                                 itemBuilder: (_, index){
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 5.0),
@@ -114,16 +119,16 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text("${controller.cartProducts[index].quantity.toString()}     x   ${controller.cartProducts[index].product.name}",
+                                            Text("${cartProducts[index].quantity.toString()}     x   ${cartProducts[index].product.name}",
                                               style: TextStyle(
-                                                color: controller.orderObject.value.color==2?black:white
+                                                color: order.color==2?black:white
                                               ),
                                             ),
                                           ],
                                         ),
-                                        Text("\$${(controller.cartProducts[index].quantity*double.parse(controller.cartProducts[index].product.price??"0")).toStringAsFixed(2)}",
+                                        Text("\$${(cartProducts[index].quantity*double.parse(cartProducts[index].product.price??"0")).toStringAsFixed(2)}",
                                           style: TextStyle(
-                                            color: controller.orderObject.value.color==2?black:white,
+                                            color: order.color==2?black:white,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 20
                                           ),
@@ -148,7 +153,7 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                                   width: 5, height: 2,
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
-                                      color: controller.orderObject.value.color==2?black:white
+                                      color: order.color==2?black:white
                                     )
                                   ),
                                 )
@@ -164,14 +169,14 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                               Text(
                                 "Total",
                                 style: subHeadingStyle.copyWith(
-                                  color: controller.orderObject.value.color==2?black:white,
+                                  color: order.color==2?black:white,
                                   fontSize: 30
                                 ),  
                               ),
                               Text(
-                                "\$${controller.totalToPay.value.toStringAsFixed(2)}",
+                                "\$${order.toPay}",
                                 style: headingStyle.copyWith(
-                                  color: controller.orderObject.value.color==2?black:white,
+                                  color: order.color==2?black:white,
                                   fontSize: 30
                                 ),
                               )
@@ -189,28 +194,13 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 17.0),
                         child: ElevatedButton(
-                          onPressed: ()async{
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (_) {
-                                return WillPopScope(
-                                  onWillPop: () async => false,
-                                  child:  Center(child: CircularProgressIndicator(strokeWidth: 5,)));
-                              }
-                            );
-                            int value = await controller.addOrder();
-                            await controller.updateProductsInStock();
-                            await mainController.getOrders();
-                            await mainController.getItemsInStock();
-                            mainController.refreshScreenFunction();
-                            Get.back();
+                          onPressed: ()async{               
                             Get.back();
                           }, 
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 15),
                             child: Text(
-                              " Finalizar ",
+                              " Regresar ",
                               style: TextStyle(
                                 color: white,
                                 fontSize: 20
@@ -219,8 +209,8 @@ class SaveOrderScreen extends GetWidget<OrderController> {
                           ),
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.grey[300],
-                            backgroundColor: controller.orderObject.value.color==0?pinkClr:
-                            controller.orderObject.value.color==1?blueClr:blueClr
+                            backgroundColor: order.color==0?pinkClr:
+                            order.color==1?blueClr:blueClr
                           )
                         ),
                       ),
@@ -235,5 +225,24 @@ class SaveOrderScreen extends GetWidget<OrderController> {
       ),
     );
   }
-
 }
+
+_appBar(OrderController controller){
+    return AppBar(
+        title: Text("Detalles del pedido",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700
+            ),
+            ),
+        leading: GestureDetector(
+          onTap: (){
+            Get.back();
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            size: 25,
+          ),
+        ),
+      );
+  }

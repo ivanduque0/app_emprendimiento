@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:app_emprendimiento/main/presentation/getx/main_controller.dart';
+import 'package:app_emprendimiento/order/domain/models/order.dart';
+import 'package:app_emprendimiento/order/domain/models/product_cart.dart';
 import 'package:app_emprendimiento/order/presentation/getx/order_controller.dart';
 import 'package:app_emprendimiento/ui/theme.dart';
 import 'package:app_emprendimiento/ui/widgets/button.dart';
@@ -29,7 +33,7 @@ class AddOrderInfoScreen extends GetWidget<OrderController> {
                 Text("Informacion del pedido",
                   style: headingStyle,
                 ),
-                MyInputField(title: "Nombre", hint:"ingrese nombre"),
+                MyInputField(title: "Nombre", hint:"ingrese nombre", textController: controller.nameTextController),
                 //MyInputField(title: "articulo", hint:"ingrese el articulo"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,7 +104,31 @@ class AddOrderInfoScreen extends GetWidget<OrderController> {
                   children: [
                     MyButton(
                           label: "Siguiente", 
-                          onTap: (){}),
+                          onTap: ()async{
+                            if (controller.nameTextController.text!="" && controller.orderDateSelected.value==true) {
+                              List productsInCartList=[];
+                              for (ProductCart cartProduct in controller.cartProducts.value) {
+                                Map data = cartProduct.jsonForDB();
+                                productsInCartList.add(data);
+                              }
+                              String productsInCartListString = jsonEncode(productsInCartList);
+                              await _setOrder(productsInCartListString);
+                              return controller.changeOrderStep(OrderStep.finish);
+                            }
+                            
+                            
+                            Get.snackbar(
+                            "Algunos campos no fueron llenados",
+                            "Por favor ingrese un nombre y una fecha de pago",
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: mainController.isDarkMode.value?white:Colors.grey[400],
+                            colorText: pinkClr,
+                            icon: Icon(Icons.warning_amber_rounded,
+                              color: Colors.red,
+                            ),
+                            margin: EdgeInsets.only(bottom: 15, left: 15, right: 15)
+                          );
+                          }),
                   ],
                 )
                 
@@ -126,6 +154,7 @@ class AddOrderInfoScreen extends GetWidget<OrderController> {
               return GestureDetector(
                 onTap: (){
                   controller.selectedColor(index);
+                  print(controller.selectedColor.value);
                   mainController.refreshScreenFunction();
                 },
                 child: Padding(
@@ -147,18 +176,20 @@ class AddOrderInfoScreen extends GetWidget<OrderController> {
     );
   }
 
-  _appBar(){
-    return AppBar(
-      
-      leading: GestureDetector(
-        onTap: (){
-          Get.back();
-        },
-        child: Icon(
-          Icons.arrow_back_ios,
-          size: 25,
-        ),
-      ),
+  _setOrder(String productsInCartList) async {
+    await controller.setOrderObject(
+      Order( 
+        name:controller.nameTextController.text, 
+        note:"", 
+        toPay:controller.totalToPay.value.toStringAsFixed(2), 
+        paid:"0.00",
+        products:productsInCartList,
+        date:DateFormat('yyyy-MM-dd').format(controller.orderDateTime.value),
+        time:DateFormat('HH:mm:ss').format(controller.orderDateTime.value),
+        remind:controller.selectedRemindTime.value,
+        color:controller.selectedColor.value,
+        isCompleted:false
+      )
     );
   }
 

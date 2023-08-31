@@ -161,8 +161,18 @@ class EditItemPage extends GetWidget<StockController> {
                             if (quantityTextController!.text=="") {
                               quantityTextController!.text="0";
                             }
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) {
+                                return WillPopScope(
+                                  onWillPop: () async => false,
+                                  child:  Center(child: CircularProgressIndicator(strokeWidth: 5,)));
+                              }
+                            );
                             _updateItemInDB();
                             await mainController.getItemsInStock();
+                            Get.back();
                             return Get.back();
                           }
                           Get.snackbar(

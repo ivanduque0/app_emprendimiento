@@ -65,7 +65,8 @@ class OrderPage extends GetWidget<OrderController> {
     return AppBar(
         title: Obx(() => Text(
             controller.orderStep.value==OrderStep.selectItems?"Añadir productos al carrito":
-            "Informacion de la orden",
+            controller.orderStep.value==OrderStep.setOrderInfo?"Informacion del pedido":
+            "Resumen del pedido",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700

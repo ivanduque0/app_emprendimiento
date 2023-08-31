@@ -14,4 +14,11 @@ class ProductCart {
     quantity=newQuantity;
   }
 
+  jsonForDB(){
+    final Map data = {};
+    data['product'] = this.product.id;
+    data['quantity'] = this.quantity;
+    return data;
+  }
+
 }
