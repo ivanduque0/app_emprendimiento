@@ -21,7 +21,7 @@ class OrderDetail extends GetWidget<OrderController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: controller.orderStep.value==OrderStep.selectItems?black:null,
+      backgroundColor: Get.isDarkMode?black:white,
         appBar: _appBar(controller),
       body: Center(
         child: Padding(
